@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>to do app</h2>
+    <input type="text" id="text-1" placeholder="add task here">
+    <button onclick="addtask()">Add</button>
+    <ul id="to-dolist"></ul>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadTodos);
+
+        function addtask()
+        {
+            let input = document.getElementById("text-1");
+            let task = input.value.trim();
+
+            if(task === "") return;
+
+            let element = document.createElement("li");
+            element.className="list-item";
+            element.innerHTML = `${task}  <button onclick="removetask(this)">delete</button>`;
+
+            let listadd = document.getElementById("to-dolist");
+            listadd.appendChild(element);
+
+            input.value="";
+            savedata();
+        }
+
+
+        function removetask(button)
+        {
+            button.parentElement.remove();
+            savedata();
+            
+        }
+
+
+        
+        function savedata()
+        {
+            let data = Array.from(document.querySelectorAll(".list-item"))
+            .map(item => item.firstChild.textContent.trim());
+            localStorage.setItem("todo",JSON.stringify(data));
+        }
+
+        function loadTodos()
+        {
+            let pre = JSON.parse(localStorage.getItem("todo")) || [];
+            const list = document.getElementById("to-dolist");
+            pre.forEach(pre => {
+                
+                const element = document.createElement("li");
+                element.className="list-item";
+                element.innerHTML=`${pre} <button onclick=removetask(this)>delete<button>`;
+
+                    let listadd = document.getElementById("to-dolist");
+                    listadd.appendChild(element);
+                    
+                
+
+            });
+        }
+    </script>
+</body>
+</html>
